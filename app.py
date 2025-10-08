@@ -1,9 +1,9 @@
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication
+from typelefter.ui.main_window import MainWindow
 import sys
 
 def run_app():
     app = QApplication(sys.argv)
-    window = QMainWindow()
-    window.setWindowTitle("Typelefter")
+    window = MainWindow()
     window.show()
     sys.exit(app.exec())
