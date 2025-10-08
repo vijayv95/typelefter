@@ -1,13 +1,13 @@
 # Contributing to Typelefter
 
 ## Branches
-- `main` = stable
-- `develop` = active development
-- Feature branches: `feature/<name>`
-- Bugfix branches: `bugfix/<name>`
+- main = stable (release-ready)
+- develop = optional integration branch
+- Feature branches: feature/<name> (optional for experiments)
+- Bugfix branches: bugfix/<name> (optional)
 
 ## Commits
-Follow Conventional Commits:
+Use Conventional Commits:
 - feat: new feature
 - fix: bug fix
 - docs: documentation
@@ -15,5 +15,5 @@ Follow Conventional Commits:
 - test: add or update tests
 
 ## Pull Requests
-- PRs must pass CI and review before merge
-- Update documentation if needed
+- Not required as a lone developer, but PRs can be used to trigger CI
+- Ensure all tests pass before merging
