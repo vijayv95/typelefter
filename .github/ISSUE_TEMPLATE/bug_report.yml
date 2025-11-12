@@ -1,0 +1,21 @@
+name: Bug Report
+description: Report a reproducible bug in Typelefter
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: What happened?
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the bug?
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead?
+  - type: input
+    attributes:
+      label: Environment
+      placeholder: "OS, Python version, Poetry version"
+
