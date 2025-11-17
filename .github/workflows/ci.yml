@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-and-check:
@@ -18,18 +18,15 @@ jobs:
         python-version: [3.12]
 
     steps:
-      # Step 1: Checkout code
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
-      # Step 3: Cache Poetry dependencies
       - name: Cache Poetry
         uses: actions/cache@v4
         with:
@@ -40,34 +37,28 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-poetry-
 
-      # Step 4: Install system build dependencies
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake python3-dev
 
-      # Step 5: Install Python dependencies
-      - name: Install Poetry dependencies
+      - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
           poetry install --no-interaction
 
-      # Step 6: Add license headers
-      - name: Add license headers
+      - name: Check license headers
         run: |
-          poetry run addlicense
-          if ! git diff --quiet; then
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add .
-            git commit -m "chore: add missing license headers"
-            git push origin HEAD
-          else
-            echo "No license changes."
-          fi
+          poetry run addlicense --check .
 
-      # Step 7: Build C++ pybind11 module
+      - name: Lint with flake8
+        run: |
+          poetry run flake8 typelefter tests
+
       - name: Build C++ module
         run: |
           cd src/typelefter/cpp
@@ -75,12 +66,6 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release
           make
 
-      # Step 8: Lint Python code
-      - name: Lint with flake8
-        run: |
-          poetry run flake8 typelefter tests
-
-      # Step 9: Run tests
       - name: Run tests
         run: |
           poetry run pytest --cov=typelefter tests/

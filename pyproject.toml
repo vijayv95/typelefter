@@ -1,19 +1,24 @@
 [tool.poetry]
 name = "typelefter"
 version = "0.1.0"
-description = ""
+description = "Free and open-source novel writing application."
 authors = ["Vijay Vasudevan <vijay.vasudevan@wind-pioneers.com>"]
 readme = "README.md"
-
-[tool.black]
-line-length = 88
-target-version = ['py312']
+license = "GPL-3.0-or-later"
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.14"
 pyside6 = "^6.10.0"
 sqlite-utils = "^3.38"
+pybind11 = "^3.0.1"
 
+[tool.poetry.scripts]
+addlicense = "typelefter.scripts.add_license_headers:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.1"
@@ -22,7 +27,6 @@ flake8 = "^7.3.0"
 black = "^25.11.0"
 isort = "^7.0.0"
 mypy = "^1.18.2"
-pybind11 = "^3.0.1"
 commitizen = "^4.10.0"
 pre-commit = "^4.4.0"
 
