@@ -2,9 +2,11 @@ name: CI + License Headers
 
 on:
   pull_request:
-    branches: [main, develop]
+    branches:
+      - main
   push:
-    branches: [main, develop]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -57,7 +59,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          poetry run flake8 typelefter tests
+          poetry run flake8 src/typelefter tests
 
       - name: Build C++ module
         run: |
