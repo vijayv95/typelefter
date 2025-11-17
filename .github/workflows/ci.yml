@@ -59,7 +59,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          poetry run flake8 src/typelefter tests
+          poetry run flake8 src tests
 
       - name: Build C++ module
         run: |
