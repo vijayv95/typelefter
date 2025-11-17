@@ -1,0 +1,81 @@
+# ------------------------
+# Python
+# ------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.env/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# ------------------------
+# C++
+# ------------------------
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+*.out
+*.a
+*.dylib
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+*.log
+
+# ------------------------
+# SQLite
+# ------------------------
+*.db
+*.sqlite3
+*.sqlite
+
+# ------------------------
+# PySide / Qt
+# ------------------------
+*.qmlc
+*.rcc
+*.ui.h
+*.qrc.cpp
+*.pyc   # compiled UI files
+
+# ------------------------
+# Editor / IDE
+# ------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*~
+
+# ------------------------
+# CI / Logs / Coverage
+# ------------------------
+.coverage
+htmlcov/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ------------------------
+# System / OS
+# ------------------------
+.DS_Store
+Thumbs.db
+*.bak
+
+# ------------------------
+# Misc
+# ------------------------
+*.tmp
+*.temp

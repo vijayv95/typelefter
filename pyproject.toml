@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "typelefter"
+version = "0.1.0"
+description = ""
+authors = ["Vijay Vasudevan <vijay.vasudevan@wind-pioneers.com>"]
+readme = "README.md"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.14"
+pyside6 = "^6.10.0"
+sqlite-utils = "^3.38"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.1"
+pytest-cov = "^7.0.0"
+flake8 = "^7.3.0"
+black = "^25.11.0"
+isort = "^7.0.0"
+mypy = "^1.18.2"
+pybind11 = "^3.0.1"
+commitizen = "^4.10.0"
+pre-commit = "^4.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
