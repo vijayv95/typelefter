@@ -1,0 +1,23 @@
+repos:
+  # 1. Standard Hooks for general file maintenance
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # 2. Conventional Commits Enforcer Hook
+  - repo: https://github.com/octue/conventional-commits
+    rev: 0.0.2
+    hooks:
+      - id: check-commit-message-is-conventional
+        stages: [commit-msg]
+        # CRITICAL FIX: This setting prevents the hook from failing due to
+        # the positional argument (.git/COMMIT_EDITMSG) that pre-commit
+        # automatically passes. The octue hook reads from stdin instead.
+        pass_filenames: false
+        args:
+          - --additional-commit-codes=ABC,DEF,GHI
+          - --maximum-header-length=72
+          - --valid-header-ending-pattern=[A-Za-z\d]
+          - --maximum-body-line-length=72
