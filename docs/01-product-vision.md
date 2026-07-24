@@ -40,26 +40,31 @@ Although different users have different workflows, they all share a common need:
 ### User Ownership
 
 > Users always own their work.
+
 TypeLefter should never prevent users from accessing, editing, or moving their content using other software.
 
 ### Openness
 
 > The project should embrace open standards, open formats, and open development.
+
 The software should be understandable not only to its users but also to its contributors.
 
 ### Transparency
 
 > Nothing should be hidden simply because the application can hide it.
+
 TypeLefter may simplify information, but it should always allow users to inspect, understand, and edit their own data.
 
 ### Longevity
 
 > Writing often lasts longer than software.
+
 Projects created today should remain accessible many years into the future. Design decisions should prioritize long-term accessibility over short-term convenience.
 
 ### Focus
 
 > TypeLefter exists to help people write.
+
 Every feature should support the writing process rather than distract from it. Complexity should only be introdoced when it provides meaningful value to writers.
 
 ## Guiding Principles
