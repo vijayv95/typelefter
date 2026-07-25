@@ -1,22 +1,23 @@
 # Domain Model
 
-## Purpose
+### Purpose
 
-This document defines the fundamental concepts of TypeLefter and the relationships between them. The domain model describes **what exists** within TypeLefter. It intentionally excludes implementation details such as storage formats, databases, and user interface.
+This document defines the conceptual model of TypeLefter. It describes the logical objects that make up a project and the relationships between them. It does not describe how those objects are stored or presented.
 
 ## Design Principles
 
-TypeLefter is built around three core concepts:
+TypeLefter is built around four concepts:
 
-- **Cards** represent information.
-- **Containers** organize cards.
-- **Scopes** determine what information is visible.
+- Cards
+- References
+- Scopes
+- Compositions
 
-Everything else is derived from these principles.
+Every feature in the application is expressed using these abstractions.
 
 ## Cards
 
-A **Card** is the fundamental unit of information in TypeLefter. Every piece of information is represented as a card, regardless of its purpose.
+A **Card** is the fundamental unit of information. Everything a writer creates is represented as a card.
 
 Examples include:
 
@@ -25,15 +26,13 @@ Examples include:
 - Character
 - Location
 - Organization
+- Timeline Event
 - Research Note
 - Lore Entry
-- Timeline Event
 - Idea
 - Checklist
-- To-do
-- Reference
 
-Cards are first-class objects.
+Cards possess a stable identity that never changes. Cards may be renamed, reorganized, or moved between projects without changing their identity.
 
 ## Card Structure
 
@@ -41,154 +40,119 @@ Every card has two sides.
 
 ### Front
 
-The front contains the information required to identify, organize, and manage the card.
+The front contains editorial information.
 
-Typical fields include:
+Examples include:
 
-- Stable identifier
-- Title or short description
+- Identifier
 - Type
+- Description
 - Status
 - Tags
-- Scope
-- Manuscript location
 - Relationships
 - User-defined metadata
 
-The front is intended for planning and organization.
+The front exists to help authors organize and understand their work.
 
 ### Back
 
 The back contains the card's primary content.
 
-Depending on the card type, this may be:
+Examples include:
 
 - prose
 - Markdown
-- character sheet
-- research notes
+- character sheets
+- research
 - worldbuilding
-- checklist items
+- notes
 
 The back is the information the author creates.
 
-## Containers
+## References
 
-Containers organize cards into a hierarchy.
-
-```text
-Table
-└── Stack
-    └── Book
-```
-
-Containers establish context but do not define the cards themselves. Cards may move between containers without changing their identity.
-
-### Table
-
-A **Table** is the root workspace. It contains one or more Stacks and may define information shared across every project.
-
-### Stack
-
-A **Stack** represents a complete writing project. It contains every card associated with that project, including:
-
-- Books
-- Research
-- Worldbuilding
-- Characters
-- Notes
-- Draft material
-
-Cards within a Stack may or may not belong to a manuscript.
-
-### Book
-
-A **Book** represents an assembled manuscript. A Book is not defined by its own content. Instead, it is an ordered collection of cards that together form a readable work. Adding a card to a Book places it within the manuscript. Removing a card from a Book removes it from the manuscript without deleting the card.
-
-#### Manuscript Position
-
-Cards that belong to a Book possess manuscript metadata describing their position.
+Cards reference other cards using their stable identities.
 
 Examples include:
 
-- Chapter
-- Scene order
-- Parent card
-- Sequence
+- scenes referencing characters
+- research notes referencing locations
+- characters referencing organizations
+- lore referencing events
 
-This information exists on the card's front. Reordering a manuscript modifies only this organizational information. The card's content remains unchanged.
+References are independent of filenames or display names.
 
-## Entities
+## Scope
 
-Entities are cards that represent things within the writer's world.
+A **Scope** determines which cards are visible within a particular context. Scopes are defined by Stacks. Cards inherit visibility from ancestor scopes. Knowledge flows downward through the scope hierarchy.
+
+## Stack
+
+A **Stack** represents a writing project.
+
+A Stack defines:
+
+- project scope
+- project configuration
+- project membership
+
+A Stack references the cards that belong to the project. A Stack does not own those cards.
+
+## Book
+
+A **Book** represents a manuscript. A Book is an ordered composition of cards belonging to a Stack.
+
+The Book defines:
+
+- reading order
+- manuscript structure
+
+A Book does not contain card content. It simply references cards in a particular sequence. Removing a card from a Book removes it from the manuscript but does not delete the card.
+
+## Entity Cards
+
+Some cards represent entities within the writer's world.
 
 Examples include:
 
 - Character
 - Location
 - Organization
-- Object
+- Item
 - Event
 
-Every entity has a stable identity independent of its display name. Documents reference entities by identity rather than by text.
+Entity cards have stable identities independent of how they are referred to within the manuscript.
 
-### Entity Extensions
+## Entity Extensions
 
-A scope may extend an existing entity. Extensions contribute additional information without creating a new entity.
+An entity may be extended within a narrower scope. Extensions contribute additional information without creating a new entity.
 
 Examples include:
 
-- childhood memories
-- military rank
-- local notes
-- relationships
 - aliases
+- childhood memories
+- local relationships
 - narrator-specific names
+- project-specific notes
 
-The resulting entity is the composition of its inherited definition and every applicable extension.
-
-## Scope
-
-Every container defines a scope. Information defined within a scope is visible to every descendant.
-
-```text
-Table
-    ↓
-Stack
-    ↓
-Book
-```
-
-Knowledge flows downward. Parents cannot automatically access information defined by their descendants.
-
-## References
-
-Cards may reference other cards.
-
-Examples include:
-
-- scenes referencing characters
-- research referencing locations
-- notes referencing ideas
-- chapters referencing scenes
-
-References are based on stable identity rather than filenames or visible text.
+The resolved entity is the composition of its inherited definition and every applicable extension.
 
 ## Views
 
-Different views present the same underlying cards.
+Views present cards in different ways.
 
 Examples include:
 
-- manuscript view
+- editor
 - corkboard
 - outline
 - graph
 - timeline
-- search results
+- search
 
-These views never duplicate information. They simply present different aspects of the same collection of cards.
+Views never duplicate information. They simply present different aspects of the same underlying cards.
 
 ## Guiding Principle
 
-TypeLefter models a writing project as a collection of interconnected cards. Containers organize those cards. Scopes determine visibility. Books assemble cards into manuscripts. Every feature of the application is built upon these shared abstractions rather than introducing separate representations for drafting, planning, outlining, or worldbuilding.
+TypeLefter models writing as a collection of interconnected cards. Scopes determine visibility. Books assemble cards into manuscripts. Everything else is a view of the same underlying model.
+
