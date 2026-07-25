@@ -2,164 +2,193 @@
 
 ## Purpose
 
-This document defines the fundamental concepts of TypeLefter and the relationships between them.
-
-The domain model describes **what exists** within TypeLefter. It intentionally avoids implementation details such as storage formats, databases, user interface, or programming language.
+This document defines the fundamental concepts of TypeLefter and the relationships between them. The domain model describes **what exists** within TypeLefter. It intentionally excludes implementation details such as storage formats, databases, and user interface.
 
 # Design Principles
 
-TypeLefter is built around two complementary models:
+TypeLefter is built around three core concepts:
 
-- **Containment** — where things belong.
-- **Knowledge** — what things are known within a given context.
+- **Cards** represent information.
+- **Containers** organize cards.
+- **Scopes** determine what information is visible.
 
-The containment hierarchy provides structure. Entities provide meaning.
+Everything else is derived from these principles.
 
-# Containment Hierarchy
+# Cards
 
-Every item in TypeLefter belongs to a hierarchy.
-
-```
-Table
-└── Stack
-    ├── Research
-    ├── Notes
-    ├── Worldbuilding
-    ├── Characters
-    └── Book
-        ├── Chapters
-        └── Front Matter
-```
-
-Each level narrows the context established by its parent.
-
-## Table
-
-A **Table** is the root workspace. It represents the author's complete writing environment and contains one or more Stacks. A Table may also define entities and resources that are shared across every Stack.
-
-## Stack
-
-A **Stack** represents a complete writing project. A Stack contains everything required to develop a story, article, thesis, or other long-form work.
+A **Card** is the fundamental unit of information in TypeLefter. Every piece of information is represented as a card, regardless of its purpose.
 
 Examples include:
 
-- research
-- planning
-- outlines
-- worldbuilding
-- notes
-- entity definitions
-- one or more Books
+- Scene
+- Chapter
+- Character
+- Location
+- Organization
+- Research Note
+- Lore Entry
+- Timeline Event
+- Idea
+- Checklist
+- To-do
+- Reference
 
-The Stack is the primary unit of creative work.
+Cards are first-class objects.
+
+# Card Structure
+
+Every card has two sides.
+
+## Front
+
+The front contains the information required to identify, organize, and manage the card.
+
+Typical fields include:
+
+- Stable identifier
+- Title or short description
+- Type
+- Status
+- Tags
+- Scope
+- Manuscript location
+- Relationships
+- User-defined metadata
+
+The front is intended for planning and organization.
+
+## Back
+
+The back contains the card's primary content.
+
+Depending on the card type, this may be:
+
+- prose
+- Markdown
+- character sheet
+- research notes
+- worldbuilding
+- checklist items
+
+The back is the information the author creates.
+
+# Containers
+
+Containers organize cards into a hierarchy.
+
+```text
+Table
+└── Stack
+    └── Book
+```
+
+Containers establish context but do not define the cards themselves. Cards may move between containers without changing their identity.
+
+## Table
+
+A **Table** is the root workspace. It contains one or more Stacks and may define information shared across every project.
+
+## Stack
+
+A **Stack** represents a complete writing project. It contains every card associated with that project, including:
+
+- Books
+- Research
+- Worldbuilding
+- Characters
+- Notes
+- Draft material
+
+Cards within a Stack may or may not belong to a manuscript.
 
 ## Book
 
-A **Book** represents the finished manuscript. It contains the material intended for reading or publication.
+A **Book** represents an assembled manuscript. A Book is not defined by its own content. Instead, it is an ordered collection of cards that together form a readable work. Adding a card to a Book places it within the manuscript. Removing a card from a Book removes it from the manuscript without deleting the card.
 
-Typical contents include:
+# Manuscript Position
 
-- front matter
-- chapters
-- appendices
+Cards that belong to a Book possess manuscript metadata describing their position.
 
-A Book exists within a Stack and automatically shares the Stack's knowledge.
+Examples include:
+
+- Chapter
+- Scene order
+- Parent card
+- Sequence
+
+This information exists on the card's front. Reordering a manuscript modifies only this organizational information. The card's content remains unchanged.
 
 # Entities
 
-An **Entity** represents something that exists within the writer's world.
+Entities are cards that represent things within the writer's world.
 
 Examples include:
 
 - Character
 - Location
 - Organization
-- Item
+- Object
 - Event
-- Timeline
-- Language
 
-Unlike documents, entities are identified by their identity rather than their display name. An entity may be referenced from anywhere within its visible scope.
-
-# Scope
-
-Every container may define entities. Entities become visible to every descendant of the container in which they are defined.
-
-```
-Table
-└── Stack
-    └── Book
-        └── Chapter
-```
-
-A Chapter may reference:
-
-- Chapter entities
-- Book entities
-- Stack entities
-- Table entities
-
-A parent cannot automatically reference entities defined within its descendants.
-
-Knowledge always flows downward through the hierarchy.
+Every entity has a stable identity independent of its display name. Documents reference entities by identity rather than by text.
 
 # Entity Extensions
 
-An entity may be extended within a narrower scope. Extensions add context without creating a new entity.
+A scope may extend an existing entity. Extensions contribute additional information without creating a new entity.
 
-For example, a Table may define a character:
+Examples include:
 
-```
-Character
-Name: Alice Morgan
-```
+- childhood memories
+- military rank
+- local notes
+- relationships
+- aliases
+- narrator-specific names
 
-A Stack describing Alice's childhood may extend that same entity:
+The resulting entity is the composition of its inherited definition and every applicable extension.
 
-```
-Character Extension
-Target: Alice Morgan
+# Scope
 
-Favourite Toy: Teddy Bear
-Best Friend: Emma
-```
+Every container defines a scope. Information defined within a scope is visible to every descendant.
 
-The entity remains the same. The Stack simply contributes additional knowledge that is visible within its scope.
-
-# Presentation
-
-Entity extensions may also define how an entity is presented within a scope.
-
-For example:
-
-```
-Entity: Alice Morgan
-
-Aliases:
-- Alice
-- Allie
-- Aligator
+```text
+Table
+    ↓
+Stack
+    ↓
+Book
 ```
 
-Different books, chapters, or narrators may refer to the same entity using different names while preserving a single underlying identity.
+Knowledge flows downward. Parents cannot automatically access information defined by their descendants.
 
 # References
 
-Documents reference entities rather than plain text. A visible name within the manuscript is therefore both human-readable and machine-understandable.
+Cards may reference other cards.
 
-This enables features such as:
+Examples include:
 
-- hyperlinks
-- autocomplete
-- rename refactoring
-- navigation
-- relationship graphs
-- appearance tracking
+- scenes referencing characters
+- research referencing locations
+- notes referencing ideas
+- chapters referencing scenes
 
-without requiring writers to manually maintain links.
+References are based on stable identity rather than filenames or visible text.
+
+# Views
+
+Different views present the same underlying cards.
+
+Examples include:
+
+- manuscript view
+- corkboard
+- outline
+- graph
+- timeline
+- search results
+
+These views never duplicate information. They simply present different aspects of the same collection of cards.
 
 # Guiding Principle
 
-The hierarchy defines **where** information belongs. Entities define **what** exists. Scopes determine **what is visible**.
-
-TypeLefter combines these concepts to provide a writing environment where knowledge is structured, reusable, and context-aware.
+TypeLefter models a writing project as a collection of interconnected cards. Containers organize those cards. Scopes determine visibility. Books assemble cards into manuscripts. Every feature of the application is built upon these shared abstractions rather than introducing separate representations for drafting, planning, outlining, or worldbuilding.
